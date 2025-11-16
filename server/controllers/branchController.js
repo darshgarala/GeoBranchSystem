@@ -43,7 +43,7 @@ const getNearestBranch = async (req, res) => {
     const longitude = parseFloat(lng);
     const maxDistanceInMeters = 50 * 1000;
 
-    const nearestBranch = await Branch.findOne({
+    const nearestBranch = await Branch.find({
       location: {
         $near: {
           $geometry: {
@@ -68,7 +68,18 @@ const getNearestBranch = async (req, res) => {
   }
 };
 
+const getBranch = async (req, res) => {
+  try {
+    const branches = await Branch.find({});
+    res.status(200).json(branches);
+  } catch (error) {
+    console.error("Error fetching all branches:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
 module.exports = {
   createBranch,
   getNearestBranch,
+  getBranch,
 };
